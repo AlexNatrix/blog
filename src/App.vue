@@ -4,9 +4,10 @@
     Create post...
   </my-button>  
   <my-dialog v-model:show="dialogVisible" @updateShow="hideDialog">
-      <post-form @createPost="createPost"></post-form>
+      <post-form @createPost="createPost"/>
   </my-dialog>
-  <post-list :posts="posts" @deletePost = "deletePost"></post-list>
+    <post-list :posts="posts" @deletePost = "deletePost" v-if="!isPostLoading"/>
+  <my-hourglass-spinner v-else >Loading</my-hourglass-spinner>
   </div>
 </template>
 
@@ -14,17 +15,16 @@
 import PostList from './components/PostList.vue';
 import PostForm from './components/PostForm.vue';
 import MyButton from './components/UI/MyButton.vue';
+import axios from 'axios'
 
 export default{
   components: { PostList, PostForm, MyButton },
   data(){
     return{
-      posts:[
-        {id:1, title:"cock", body: "suck"},
-        {id:2, title:"cock", body: "suck"},
-        {id:3, title:"cock", body: "suck"},
-      ],
-      dialogVisible:true
+      posts:[],
+      dialogVisible:true,
+      isPostLoading:true,
+      spiner:'/'
     }
   },
   methods:{
@@ -40,7 +40,22 @@ export default{
     },
     showDialog(){
       this.dialogVisible = true;
-    }
+    },
+    async fetchPosts(){
+      try{
+        setTimeout(async ()=>{
+          const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10');
+          this.posts = response.data;
+          this.isPostLoading=false
+        },10000)
+      } catch(e){
+        alert('Error')
+      }
+    },
+  },
+  mounted(){
+    this.dialogVisible=false;
+    this.fetchPosts();
   }
 }
 </script>
