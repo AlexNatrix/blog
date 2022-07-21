@@ -10,7 +10,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .button{
   align-self: flex-end;
   padding: 10px 15px;
