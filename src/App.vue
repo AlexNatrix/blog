@@ -1,12 +1,17 @@
 <template>
   <div class="app">
-  <my-button @click = "showDialog" style="margin:15px 0px">
-    Create post...
-  </my-button>  
+  <h1>Posts</h1>
+  <my-input v-model="searchQuery" placeholder="Search..."></my-input>
+  <div class = "my_buttons">
+    <my-button @click = "showDialog">
+      Create post...
+    </my-button> 
+  <my-select :options="sortOptions" v-model="selectedSort"></my-select>
+  </div> 
   <my-dialog v-model:show="dialogVisible" @updateShow="hideDialog">
       <post-form @createPost="createPost"/>
   </my-dialog>
-    <post-list :posts="posts" @deletePost = "deletePost" v-if="!isPostLoading"/>
+    <post-list :posts="searchedAndSorted" @deletePost = "deletePost" v-if="!isPostLoading"/>
   <my-hourglass-spinner v-else >Loading</my-hourglass-spinner>
   </div>
 </template>
@@ -24,7 +29,12 @@ export default{
       posts:[],
       dialogVisible:true,
       isPostLoading:true,
-      spiner:'/'
+      selectedSort:"",
+      searchQuery:"",
+      sortOptions:[
+        {value:"title",name:"by Title"},
+        {value:"body",name:"by Content"},
+      ]
     }
   },
   methods:{
@@ -43,20 +53,29 @@ export default{
     },
     async fetchPosts(){
       try{
-        setTimeout(async ()=>{
           const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10');
           this.posts = response.data;
-          this.isPostLoading=false
-        },10000)
       } catch(e){
         alert('Error')
+      }finally{
+        this.isPostLoading=false
       }
     },
   },
   mounted(){
     this.dialogVisible=false;
     this.fetchPosts();
-  }
+  },
+  computed:{
+    sortPosts(){
+      return [...this.posts].sort((a,b)=>a[this.selectedSort]?.localeCompare(b[this.selectedSort]))
+    },
+    searchedAndSorted(){
+      return this.sortPosts.filter((a)=>a.title.includes(this.searchQuery))
+    }
+  },
+  watch:{
+  },
 }
 </script>
 
@@ -65,6 +84,11 @@ export default{
   margin : 0;
   padding: 0;
   box-sizing: border-box;
+}
+.my_buttons{
+  margin:15px 0px;
+  display:flex;
+  justify-content: space-between;
 }
 .app{
   padding: 20px;

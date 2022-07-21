@@ -4,7 +4,7 @@ import components from "@/components/UI"
 
 
 let myApp = createApp(App);
-console.log(components)
+//console.log(components)
 components.forEach((component)=>myApp.component(component.name,component));
 
 myApp.mount('#app')
