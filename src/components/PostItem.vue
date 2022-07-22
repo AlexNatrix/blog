@@ -6,6 +6,7 @@
       <div><strong>Body: </strong> {{post.body}}</div>
   </div>
   <div>
+    <my-button @click="$router.push(`/posts/${post.id}`)">Goto</my-button>
     <my-button @click="deletePost">Delete</my-button>
   </div>
 </div>
