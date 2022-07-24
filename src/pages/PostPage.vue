@@ -1,7 +1,7 @@
 <template>
-  <div class="app">
+  <div style="padding: 20px;">
   <h1>Posts</h1>
-  <my-input v-model="searchQuery" placeholder="Search..."></my-input>
+  <my-input v-focus v-model="searchQuery" placeholder="Search..."></my-input>
   <div class = "my_buttons">
     <my-button @click = "showDialog">
       Create post...
@@ -14,7 +14,7 @@
     <post-list :posts="searchedAndSorted" @deletePost = "deletePost" v-if="!isPostLoading"/>
   <my-hourglass-spinner v-else >Loading</my-hourglass-spinner>
   </div>
-  <div ref="observer" class="observer"></div>
+  <div v-intersection = "loadMorePosts" class="observer"></div>
   <!-- <div class="page_wrapper">
     <div @click="changePage(pageNumber)"
     v-for="pageNumber in totalPages" 
@@ -32,7 +32,7 @@
 import PostList from '@/components/PostList.vue';
 import PostForm from '@/components/PostForm.vue';
 import MyButton from '@/components/UI/MyButton.vue';
-import axios from 'axios'
+import axios from 'axios';
 
 export default{
   components: { PostList, PostForm, MyButton },
@@ -98,7 +98,7 @@ export default{
       } catch(e){
         alert('Error')
       }
-    },
+    }
     // changePage(pageNumber){
     //   this.page = pageNumber;
     // }
@@ -106,17 +106,6 @@ export default{
   mounted(){
     this.dialogVisible=false;
     this.fetchPosts();
-    let options = {
-    rootMargin: '0px',
-    threshold: 1.0
-    }
-    let callback = (entries)=>  {
-      if(entries[0].isIntersecting && this.page < this.totalPages){
-        this.loadMorePosts()
-      }
-    };
-    let observer = new IntersectionObserver(callback, options);
-    observer.observe(this.$refs.observer)
   },
   computed:{
     sortPosts(){

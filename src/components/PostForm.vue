@@ -1,7 +1,7 @@
 <template>
     <form class="form" @submit.prevent>
       <h4>Create post</h4>
-      <my-input v-model="post.title" placeholder="type title =>">
+      <my-input v-focus v-model="post.title" placeholder="type title =>">
       </my-input>
       <my-input v-model="post.body" 
       @input="post.body = $event.target.value" 

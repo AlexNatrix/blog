@@ -5,7 +5,7 @@
       <div><strong>Title: </strong> {{post.title}}</div>
       <div><strong>Body: </strong> {{post.body}}</div>
   </div>
-  <div>
+  <div class="my_buttons">
     <my-button @click="$router.push(`/posts/${post.id}`)">Goto</my-button>
     <my-button @click="deletePost">Delete</my-button>
   </div>
@@ -31,6 +31,10 @@ export default {
 </script>
 
 <style scoped>
+.my_buttons{
+  display:flex;
+  justify-content: space-between;
+}
 .post{
   padding: 15px;
   border: 2px solid teal;
