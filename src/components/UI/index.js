@@ -7,6 +7,7 @@ import NavBar from "@/components/UI/NavBar";
 import MyDrawier from "@/components/UI/MyDrawier";
 import MyLogin from "@/components/UI/MyLogin";
 import MySignin from "@/components/UI/MySignin";
+import MyMenu from "@/components/UI/MyMenu";
 
 export default [
   MyButton,
@@ -18,4 +19,5 @@ export default [
   MyDrawier,
   MyLogin,
   MySignin,
+  MyMenu,
 ];

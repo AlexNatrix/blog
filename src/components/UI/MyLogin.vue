@@ -10,11 +10,11 @@
         @finishFailed="onFinishFailed"
       >
         <a-form-item
-          label="Username"
-          name="username"
-          :rules="[{ required: true, message: 'Please input your username!' }]"
+          label="Email"
+          name="email"
+          :rules="[{ required: true, message: 'Please input your Email!' }]"
         >
-          <a-input v-model:value="formState.username">
+          <a-input v-model:value="formState.email">
             <template #prefix>
               <UserOutlined class="site-form-item-icon" />
             </template>
@@ -74,7 +74,7 @@ export default defineComponent({
   setup(_, { emit }) {
     const visible = ref(false);
     const formState = reactive({
-      username: "",
+      email: "",
       password: "",
       remember: true,
     });
@@ -94,7 +94,7 @@ export default defineComponent({
     };
 
     const disabled = computed(() => {
-      return !(formState.username && formState.password);
+      return !(formState.email && formState.password);
     });
     return {
       visible,

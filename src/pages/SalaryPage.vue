@@ -1,11 +1,16 @@
 <template>
-  <div class="chart">
-    <apexchart
-      width="60%"
-      type="bar"
-      :options="options"
-      :series="series"
-    ></apexchart>
+  <div style="display: flex; flex: wrap; border: solid 2px teal">
+    <div class="chart">
+      <apexchart
+        width="75%"
+        type="bar"
+        :options="options"
+        :series="series"
+      ></apexchart>
+    </div>
+    <div>
+      <my-menu />
+    </div>
   </div>
   <div>
     <pre>{{ resp }}</pre>
@@ -53,15 +58,24 @@ export default {
         //   response.headers["x-total-count"] / this.limit
         // );
         this.resp = JSON.stringify(response.data, null, "\t");
+        window.localStorage.setItem("HH", JSON.stringify(response.data));
       } catch (e) {
         alert("Error");
       } finally {
-        this.isPostLoading = false;
+        this.isLoading = false;
       }
     },
   },
   mounted() {
-    this.fetchJobs();
+    if (window.localStorage.getItem("HH") !== null) {
+      this.resp = JSON.stringify(
+        JSON.parse(window.localStorage.getItem("HH")),
+        null,
+        "\t"
+      );
+    } else {
+      this.fetchJobs();
+    }
   },
 };
 </script>
@@ -69,6 +83,6 @@ export default {
 <style scoped>
 .chart {
   /* display: flex; */
-  border: solid 2px teal;
+  width: 75%;
 }
 </style>

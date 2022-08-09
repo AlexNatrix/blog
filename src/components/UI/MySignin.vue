@@ -17,6 +17,9 @@
         @validate="handleValidate"
         @finishFailed="handleFinishFailed"
       >
+        <a-form-item has-feedback label="Email" name="Email">
+          <a-input v-model:value="formState.Email" />
+        </a-form-item>
         <a-form-item has-feedback label="Password" name="pass">
           <a-input
             v-model:value="formState.pass"
@@ -31,9 +34,7 @@
             autocomplete="off"
           />
         </a-form-item>
-        <a-form-item has-feedback label="Age" name="age">
-          <a-input-number v-model:value="formState.age" />
-        </a-form-item>
+
         <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
           <a-button type="primary" html-type="submit">Submit</a-button>
           <a-button style="margin-left: 10px" @click="resetForm"
@@ -54,24 +55,8 @@ export default defineComponent({
     const formState = reactive({
       pass: "",
       checkPass: "",
-      age: undefined,
+      Email: "",
     });
-
-    let checkAge = async (_rule, value) => {
-      if (!value) {
-        return Promise.reject("Please input the age");
-      }
-
-      if (!Number.isInteger(value)) {
-        return Promise.reject("Please input digits");
-      } else {
-        if (value < 18) {
-          return Promise.reject("Age must be greater than 18");
-        } else {
-          return Promise.resolve();
-        }
-      }
-    };
 
     let validatePass = async (_rule, value) => {
       if (value === "") {
@@ -109,9 +94,10 @@ export default defineComponent({
           trigger: "change",
         },
       ],
-      age: [
+      Email: [
         {
-          validator: checkAge,
+          required: true,
+          type: "email",
           trigger: "change",
         },
       ],
