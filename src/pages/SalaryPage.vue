@@ -1,17 +1,10 @@
 <template>
-  <div style="display: flex; flex: wrap; border: solid 2px teal">
-    <div class="chart">
-      <apexchart
-        width="75%"
-        type="bar"
-        :options="options"
-        :series="series"
-      ></apexchart>
-    </div>
-    <div>
-      <my-menu />
-    </div>
-  </div>
+  <a-row type="flex">
+    <a-col flex="auto">
+      <apexchart type="bar" :options="options" :series="series"></apexchart
+    ></a-col>
+    <a-col flex="25%"><my-menu /></a-col>
+  </a-row>
   <div>
     <pre>{{ resp }}</pre>
   </div>
@@ -52,11 +45,6 @@ export default {
             },
           }
         );
-        //TODO:fix this.'this.totalPages' should start with zero;
-
-        // this.totalPages = Math.ceil(
-        //   response.headers["x-total-count"] / this.limit
-        // );
         this.resp = JSON.stringify(response.data, null, "\t");
         window.localStorage.setItem("HH", JSON.stringify(response.data));
       } catch (e) {
