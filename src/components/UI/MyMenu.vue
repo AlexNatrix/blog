@@ -1,5 +1,5 @@
 <template>
-  <a-slider :label="period" v-model:value="days" :min="1" :max="30" />
+  <a-slider v-model:value="days" :min="1" :max="30" />
   <a-input-number
     size="small"
     v-model:value="days"
@@ -7,13 +7,7 @@
     :max="30"
     style="margin-left: 16px"
   />
-  <a-slider
-    :label="Salaryamount"
-    v-model:value="salaryRange"
-    range
-    :min="0"
-    :max="10000"
-  />
+  <a-slider v-model:value="salaryRange" range :min="0" :max="10000" />
   <div style="display: flex">
     <a-input-number
       size="small"
@@ -33,7 +27,11 @@
   <br />
   <br />
 
-  <a-radio-group v-model:value="currentJob" button-style="solid">
+  <a-radio-group
+    @change="resetFramework"
+    v-model:value="currentJob"
+    button-style="solid"
+  >
     <a-radio v-for:="job of jobs.keys()" :job="job" :value="job">{{
       job
     }}</a-radio>
@@ -59,14 +57,21 @@
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, watch } from "vue";
 export default defineComponent({
   name: "my-menu",
-  setup() {
+  emits: ["menuNewState"],
+  setup(_, { emit }) {
     const days = ref(30);
     const salaryRange = ref([0, 10000]);
-    const currentJob = ref();
+    const currentJob = ref("java");
     const currentFramework = ref("none");
+    const resetFramework = () => {
+      currentFramework.value = "none";
+    };
+    watch([days, salaryRange, currentJob, currentFramework], (newVal) => {
+      emit("menuNewState", newVal);
+    });
     const jobs = new Map([
       ["java", { isActive: false, frameworks: ["none", "spring"] }],
       [
@@ -86,6 +91,7 @@ export default defineComponent({
       disabled != disabled;
     };
     return {
+      resetFramework,
       salaryRange,
       currentJob,
       currentFramework,

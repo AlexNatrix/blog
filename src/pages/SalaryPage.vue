@@ -3,7 +3,7 @@
     <a-col flex="auto">
       <apexchart type="bar" :options="options" :series="series"></apexchart
     ></a-col>
-    <a-col flex="25%"><my-menu /></a-col>
+    <a-col flex="25%"><my-menu @menuNewState="currentMenu" /></a-col>
   </a-row>
   <div>
     <pre>{{ resp }}</pre>
@@ -34,6 +34,9 @@ export default {
     };
   },
   methods: {
+    currentMenu(value) {
+      console.log(value);
+    },
     async fetchJobs() {
       this.isLoading = true;
       try {
