@@ -1,7 +1,12 @@
 <template>
   <a-row type="flex">
     <a-col flex="auto">
-      <apexchart type="bar" :options="options" :series="series"></apexchart
+      <apexchart
+        type="bar"
+        :options="options"
+        :series="series"
+        :key="series.length"
+      ></apexchart
     ></a-col>
     <a-col flex="25%"><my-menu @menuNewState="currentMenu" /></a-col>
   </a-row>
@@ -20,20 +25,41 @@ export default {
           id: "vuechart-example",
         },
         xaxis: {
-          categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998],
+          categories: [],
         },
       },
       series: [
         {
           name: "series-1",
-          data: [30, 40, 45, 50, 49, 60, 70, 91],
+          data: [],
         },
       ],
       resp: " ",
+      jobs: [],
+      jobsCount: [],
       isLoading: true,
     };
   },
   methods: {
+    setJobs() {
+      const map = new Map();
+      for (const item of JSON.parse(this.resp).items) {
+        if (!item.created_at) {
+          continue;
+        }
+        const date = new Date(Date.parse(item.created_at));
+        if (map.has(date.getDate())) {
+          const val = map.get(date.getDate()) + 1;
+          map.set(date.getDate(), val);
+        } else {
+          map.set(date.getDate(), 1);
+        }
+      }
+      this.options.xaxis.categories.push(...map.keys());
+      this.series[0].data.push(...map.values());
+      console.log("hi from " + this.jobs);
+      console.log("hi from " + this.jobsCount);
+    },
     currentMenu(value) {
       console.log(value);
     },
@@ -41,7 +67,7 @@ export default {
       this.isLoading = true;
       try {
         const response = await axios.get(
-          "https://api.hh.ru/vacancies?text=golang",
+          "https://api.hh.ru/vacancies?text=golang&per_page=100",
           {
             params: {
               _text: "golang",
@@ -58,14 +84,19 @@ export default {
     },
   },
   mounted() {
+    this.$nextTick(() => {
+      window.dispatchEvent(new Event("resize"));
+    });
     if (window.localStorage.getItem("HH") !== null) {
       this.resp = JSON.stringify(
         JSON.parse(window.localStorage.getItem("HH")),
         null,
         "\t"
       );
+      this.setJobs();
     } else {
       this.fetchJobs();
+      this.setJobs();
     }
   },
 };
