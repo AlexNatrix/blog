@@ -36,19 +36,21 @@
       job
     }}</a-radio>
   </a-radio-group>
-  <a-radio-group
-    size="large"
-    v-model:value="currentFramework"
-    button-style="primary"
-    style="margin-top: 15px"
-  >
-    <a-radio-button
+  <div>
+    <a-radio-group
+      size="large"
+      v-model:value="currentFramework"
+      button-style="primary"
       style="margin-top: 15px"
-      v-for:="framework in jobs.get(currentJob).frameworks"
-      :value="framework"
-      >{{ framework }}</a-radio-button
     >
-  </a-radio-group>
+      <a-radio-button
+        style="margin-top: 15px"
+        v-for:="framework in jobs.get(currentJob).frameworks"
+        :value="framework"
+        >{{ framework }}</a-radio-button
+      >
+    </a-radio-group>
+  </div>
   <div>
     <a-checkbox style="margin-top: 15px" v-model:checked="checked"
       >Checkbox</a-checkbox
@@ -58,20 +60,24 @@
 
 <script>
 import { defineComponent, ref, watch } from "vue";
+import { debounce } from "lodash";
 export default defineComponent({
   name: "my-menu",
   emits: ["menuNewState"],
   setup(_, { emit }) {
-    const days = ref(30);
+    const days = ref(1);
     const salaryRange = ref([0, 10000]);
     const currentJob = ref("java");
     const currentFramework = ref("none");
     const resetFramework = () => {
       currentFramework.value = "none";
     };
-    watch([days, salaryRange, currentJob, currentFramework], (newVal) => {
-      emit("menuNewState", newVal);
-    });
+    watch(
+      [days, salaryRange, currentJob, currentFramework],
+      debounce((newVal) => {
+        emit("menuNewState", newVal);
+      }, 1000)
+    );
     const jobs = new Map([
       ["java", { isActive: false, frameworks: ["none", "spring"] }],
       [
@@ -97,7 +103,6 @@ export default defineComponent({
       currentFramework,
       toggleDisabled,
       jobs,
-      size: ref(8),
       days,
     };
   },

@@ -1,6 +1,6 @@
 <template>
   <a-row type="flex">
-    <a-col flex="auto">
+    <a-col flex="auto" v-if="options">
       <apexchart
         type="bar"
         :options="options"
@@ -10,94 +10,103 @@
     ></a-col>
     <a-col flex="25%"><my-menu @menuNewState="currentMenu" /></a-col>
   </a-row>
-  <div>
-    <pre>{{ resp }}</pre>
-  </div>
+  <!-- <div>
+    <pre>{{ jobs }}</pre>
+  </div> -->
 </template>
 
 <script>
-import axios from "axios";
+import { computed, ref, watch } from "vue";
+import fetchHeadHunterJobs from "@/hooks/fetchHeadHunterJobs";
+import fetchMoreHeadHunterJobs from "@/hooks/fetchMoreHeadHunterJobs";
+import { debounce } from "lodash";
 export default {
   data() {
     return {
-      options: {
-        chart: {
-          id: "vuechart-example",
-        },
-        xaxis: {
-          categories: [],
-        },
-      },
-      series: [
-        {
-          name: "series-1",
-          data: [],
-        },
-      ],
       resp: " ",
-      jobs: [],
       jobsCount: [],
-      isLoading: true,
     };
   },
-  methods: {
-    setJobs() {
-      const map = new Map();
-      for (const item of JSON.parse(this.resp).items) {
-        if (!item.created_at) {
-          continue;
-        }
-        const date = new Date(Date.parse(item.created_at));
-        if (map.has(date.getDate())) {
-          const val = map.get(date.getDate()) + 1;
-          map.set(date.getDate(), val);
-        } else {
-          map.set(date.getDate(), 1);
-        }
-      }
-      this.options.xaxis.categories.push(...map.keys());
-      this.series[0].data.push(...map.values());
-      console.log("hi from " + this.jobs);
-      console.log("hi from " + this.jobsCount);
-    },
-    currentMenu(value) {
-      console.log(value);
-    },
-    async fetchJobs() {
-      this.isLoading = true;
-      try {
-        const response = await axios.get(
-          "https://api.hh.ru/vacancies?text=golang&per_page=100",
-          {
-            params: {
-              _text: "golang",
-            },
-          }
-        );
-        this.resp = JSON.stringify(response.data, null, "\t");
-        window.localStorage.setItem("HH", JSON.stringify(response.data));
-      } catch (e) {
-        alert("Error");
-      } finally {
-        this.isLoading = false;
-      }
-    },
-  },
-  mounted() {
-    this.$nextTick(() => {
-      window.dispatchEvent(new Event("resize"));
+  setup() {
+    const currentJob = ref("java");
+    const days = ref(1);
+    const salaryRange = ref([]);
+    const currentFramework = ref("none");
+    const currentMenu = (val) => {
+      console.log(val);
+      [
+        days.value,
+        salaryRange.value,
+        currentJob.value,
+        currentFramework.value,
+      ] = val;
+    };
+    const { fetchJobs, jobs, totalPages, isJobsLoading, jobsCountMap } =
+      fetchHeadHunterJobs(currentJob.value);
+    const options = computed(() => {
+      return {
+        chart: {
+          id: currentJob.value,
+        },
+        xaxis: {
+          categories: [...jobsCountMap.value.keys()],
+        },
+      };
     });
-    if (window.localStorage.getItem("HH") !== null) {
-      this.resp = JSON.stringify(
-        JSON.parse(window.localStorage.getItem("HH")),
-        null,
-        "\t"
-      );
-      this.setJobs();
-    } else {
-      this.fetchJobs();
-      this.setJobs();
-    }
+    const series = computed(() => [
+      {
+        name: currentJob.value + "series",
+        data: [...jobsCountMap.value.values()],
+      },
+    ]);
+    watch(
+      [days, salaryRange, currentJob, currentFramework],
+      debounce((newVal) => {
+        console.log(newVal);
+        fetchJobs(
+          newVal[3] === "none" ? newVal[2] : newVal[2] + " " + newVal[3]
+        );
+      }, 10)
+    );
+    // watch(
+    //   jobs,
+    //   debounce((newVal) => countJobs(newVal, jobsCountMap.value), 500),
+    //   {
+    //     flush: "post",
+    //   }
+    // );
+    // watch(
+    //   jobs,
+    //   debounce((newVal) => {
+    //     for (const item of newVal) {
+    //       if (!item.created_at) {
+    //         continue;
+    //       }
+    //       //TODO: find more robust way to get date without new Date();
+    //       const date = item.created_at.slice(0, 10);
+    //       if (jobsCountMap.value.has(date)) {
+    //         const val = jobsCountMap.value.get(date) + 1;
+    //         jobsCountMap.value.set(date, val);
+    //       } else {
+    //         jobsCountMap.value.set(date, 1);
+    //       }
+    //     }
+    //   }, 5000),
+    //   { flush: "pre" }
+    // );
+    const { fetchMoreJobs } = fetchMoreHeadHunterJobs("java", totalPages, jobs);
+    // onMounted();
+
+    return {
+      fetchJobs,
+      fetchMoreJobs,
+      options,
+      series,
+      jobs,
+      totalPages,
+      isJobsLoading,
+      currentMenu,
+    };
   },
 };
 </script>
