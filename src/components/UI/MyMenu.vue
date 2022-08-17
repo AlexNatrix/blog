@@ -1,28 +1,30 @@
 <template>
-  <a-slider v-model:value="days" :min="1" :max="30" />
-  <a-input-number
-    size="small"
-    v-model:value="days"
-    :min="1"
-    :max="30"
-    style="margin-left: 16px"
-  />
-  <a-slider v-model:value="salaryRange" range :min="0" :max="10000" />
-  <div style="display: flex">
+  <div>
+    <a-slider v-model:value="days" :min="1" :max="30" />
     <a-input-number
       size="small"
-      v-model:value="salaryRange[0]"
-      :min="0"
-      :max="10000"
+      v-model:value="days"
+      :min="1"
+      :max="30"
       style="margin-left: 16px"
     />
-    <a-input-number
-      size="small"
-      v-model:value="salaryRange[1]"
-      :min="0"
-      :max="10000"
-      style="margin-left: 16px"
-    />
+    <a-slider v-model:value="salaryRange" range :min="0" :max="10000" />
+    <div style="display: flex">
+      <a-input-number
+        size="small"
+        v-model:value="salaryRange[0]"
+        :min="0"
+        :max="10000"
+        style="margin-left: 16px"
+      />
+      <a-input-number
+        size="small"
+        v-model:value="salaryRange[1]"
+        :min="0"
+        :max="10000"
+        style="margin-left: 16px"
+      />
+    </div>
   </div>
   <br />
   <br />
@@ -55,6 +57,7 @@
     <a-checkbox style="margin-top: 15px" v-model:checked="checked"
       >Checkbox</a-checkbox
     >
+    <a-button @click="clearCache">Clear cache</a-button>
   </div>
 </template>
 
@@ -65,6 +68,10 @@ export default defineComponent({
   name: "my-menu",
   emits: ["menuNewState"],
   setup(_, { emit }) {
+    //TODO: DEBUG ONLY
+    const clearCache = () => {
+      window.sessionStorage.clear();
+    };
     const days = ref(1);
     const salaryRange = ref([0, 10000]);
     const currentJob = ref("java");
@@ -97,6 +104,7 @@ export default defineComponent({
       disabled != disabled;
     };
     return {
+      clearCache,
       resetFramework,
       salaryRange,
       currentJob,

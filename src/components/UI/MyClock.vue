@@ -19,6 +19,7 @@ export default {
   name: "my-clock",
   data() {
     return {
+      startTime: Date.now(),
       hover: "",
       clock: {
         ident: ":",
@@ -34,11 +35,7 @@ export default {
   mounted() {
     setInterval(() => this.setTime(), 1000);
   },
-  computed: {
-    clockTitle() {
-      return Date.now();
-    },
-  },
+
   methods: {
     setTime() {
       const timeFormat = (a) => (a < 10 ? "0" + a : a);
