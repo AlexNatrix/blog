@@ -6,6 +6,7 @@ export default function fetchHeadHunterJobs(text) {
   const totalPages = ref(0);
   const isJobsLoading = ref(true);
   const fetchJobs = async (text, num = 0) => {
+    isJobsLoading.value = true;
     const requestConfig = {
       method: "get",
       url: "https://api.hh.ru/vacancies",
@@ -16,12 +17,7 @@ export default function fetchHeadHunterJobs(text) {
       },
     };
     try {
-      const query = `?text=${requestConfig.params.text}&per_page=${requestConfig.params.per_page}&page=${requestConfig.params.page}`;
-      const response = !window.sessionStorage.getItem(query)
-        ? await axios(requestConfig)
-        : JSON.parse(window.sessionStorage.getItem(query));
-      window.sessionStorage.setItem(query, JSON.stringify(response));
-      console.log(response);
+      const response = await axios(requestConfig);
       totalPages.value = response.data.pages;
       jobs.value = [
         ...response.data.items.map((item) => {

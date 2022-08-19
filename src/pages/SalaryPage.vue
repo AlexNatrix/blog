@@ -2,14 +2,20 @@
   <div>
     <a-row type="flex">
       <a-col flex="auto" v-if="options">
-        <apexchart
-          type="bar"
-          :options="options"
-          :series="series"
-          :key="series.length"
-        ></apexchart
+        <a-spin
+          :spinning="isJobsLoading"
+          size="large"
+          style="margin-top: auto; align: center"
+          tip="Loading..."
+        >
+          <apexchart
+            type="bar"
+            :options="options"
+            :series="series"
+            :key="series.length"
+          ></apexchart></a-spin
       ></a-col>
-      <a-col flex="500px"><my-menu @menuNewState="currentMenu" /></a-col>
+      <a-col flex="20%"><my-menu @menuNewState="currentMenu" /></a-col>
     </a-row>
   </div>
   <button @click.prevent="fetchMore">GET MORE</button>
