@@ -7,6 +7,7 @@ import store from "@/store";
 import VueApexCharts from "vue3-apexcharts";
 import Antd from "ant-design-vue";
 import "ant-design-vue/dist/antd.css";
+import './registerServiceWorker'
 
 let myApp = createApp(App);
 //console.log(components)

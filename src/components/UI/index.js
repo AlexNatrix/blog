@@ -8,7 +8,7 @@ import MyDrawier from "@/components/UI/MyDrawier";
 import MyLogin from "@/components/UI/MyLogin";
 import MySignin from "@/components/UI/MySignin";
 import MyMenu from "@/components/UI/MyMenu";
-import MyModalLoader from "@/components/UI/MyModalLoader";
+import MyStats from "@/components/UI/MyStats";
 
 export default [
   MyButton,
@@ -21,5 +21,5 @@ export default [
   MyLogin,
   MySignin,
   MyMenu,
-  MyModalLoader,
+  MyStats,
 ];

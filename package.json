@@ -2,17 +2,21 @@
   "name": "blog",
   "version": "0.1.0",
   "private": true,
+  "description": "```\r npm install\r ```",
+  "author": "",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
+  "main": "babel.config.js",
   "dependencies": {
     "ant-design-vue": "^3.2.10",
     "apexcharts": "^3.35.4",
     "axios": "^0.27.2",
     "core-js": "^3.8.3",
     "lodash": "^4.17.21",
+    "register-service-worker": "^1.7.2",
     "vue": "^3.2.13",
     "vue-cli": "^1.2.0",
     "vue-router": "^4.0.13",
@@ -24,6 +28,7 @@
     "@babel/eslint-parser": "^7.12.16",
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-eslint": "~5.0.0",
+    "@vue/cli-plugin-pwa": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
     "eslint": "^7.32.0",
     "eslint-plugin-vue": "^8.0.3"
@@ -48,16 +53,13 @@
     "not dead",
     "not ie 11"
   ],
-  "description": "```\r npm install\r ```",
-  "main": "babel.config.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/AlexNatrix/blog.git"
-  },
-  "author": "",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/AlexNatrix/blog/issues"
   },
-  "homepage": "https://github.com/AlexNatrix/blog#readme"
+  "homepage": "https://github.com/AlexNatrix/blog#readme",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlexNatrix/blog.git"
+  }
 }

@@ -2,15 +2,16 @@ const { defineConfig } = require("@vue/cli-service");
 module.exports = defineConfig({
   transpileDependencies: true,
   pwa: {
-    workboxPluginMode: "InjectManifest",
+    name: "blog",
+    workboxPluginMode: "GenerateSW",
 
     workboxOptions: {
       runtimeCaching: [
         {
           urlPattern: new RegExp("^https://api.hh.ru/vacancies"),
-          handler: "networkFirst",
+          handler: "CacheFirst",
+          method: "GET",
           options: {
-            networkTimeoutSeconds: 20,
             cacheName: "api-cache",
             cacheableResponse: {
               statuses: [0, 200],
