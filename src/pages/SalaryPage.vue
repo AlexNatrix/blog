@@ -32,6 +32,7 @@
 import { computed, ref, watch } from "vue";
 
 import fetchHeadHunterJobs from "@/hooks/fetchHeadHunterJobs";
+import fetchAll from "@/hooks/HeavyFetcher";
 import { debounce } from "lodash";
 
 export default {
@@ -206,6 +207,7 @@ export default {
       }, 10)
     );
     const fetchMore = () => {
+      fetchAll(currentJob.value + "frontend", lastSearchedDate);
       console.log("In development");
     };
 

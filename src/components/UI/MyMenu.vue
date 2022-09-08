@@ -66,20 +66,20 @@
     </div>
     <a-divider />
     <div>
-      <a-card title="Include" size="small">
+      <a-card title="Options" size="small">
         <div class="jobs_level_menu" style="margin: 6px 0px 6px">
-          <p style="margin: 0px">Junior</p>
-          <a-switch v-model:checked="junior" @change="switchHandler" />
+          <p style="margin: 0px">Spread by weeks</p>
+          <a-switch v-model:checked="byWeeks" @change="switchHandler" />
         </div>
         <a-divider style="margin: 2px" />
         <div class="jobs_level_menu" style="margin: 6px 0px 6px">
-          <p style="margin: 0px">Middle</p>
-          <a-switch v-model:checked="middle" @change="switchHandler" />
+          <p style="margin: 0px">Median</p>
+          <a-switch v-model:checked="median" @change="switchHandler" />
         </div>
         <a-divider style="margin: 2px" />
         <div class="jobs_level_menu" style="margin: 6px 0px 6px">
-          <p style="margin: 0px">Senior</p>
-          <a-switch v-model:checked="senior" @change="switchHandler" />
+          <p style="margin: 0px">Only with salary</p>
+          <a-switch v-model:checked="onlyWithSalary" @change="switchHandler" />
         </div>
         <a-button @click="pieChart">Pie chart</a-button>
       </a-card>
@@ -104,9 +104,9 @@ export default defineComponent({
     const salaryRange = ref([0, 1000000]);
     const currentJob = ref("java");
     const currentFramework = ref("none");
-    const junior = ref(true);
-    const middle = ref(true);
-    const senior = ref(true);
+    const byWeeks = ref(false);
+    const median = ref(false);
+    const onlyWithSalary = ref(true);
     const resetFramework = () => {
       currentFramework.value = "none";
     };
@@ -115,7 +115,15 @@ export default defineComponent({
     };
     const switchHandler = (val) => (val = !val);
     watch(
-      [days, salaryRange, currentJob, currentFramework, junior, middle, senior],
+      [
+        days,
+        salaryRange,
+        currentJob,
+        currentFramework,
+        byWeeks,
+        median,
+        onlyWithSalary,
+      ],
       debounce((newVal) => {
         context.emit("menuNewState", newVal);
       }, 100)
@@ -148,9 +156,9 @@ export default defineComponent({
       jobs,
       days,
       switchHandler,
-      junior,
-      middle,
-      senior,
+      median,
+      byWeeks,
+      onlyWithSalary,
       pieChart,
     };
   },
