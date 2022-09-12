@@ -9,6 +9,7 @@ import MyLogin from "@/components/UI/MyLogin";
 import MySignin from "@/components/UI/MySignin";
 import MyMenu from "@/components/UI/MyMenu";
 import MyStats from "@/components/UI/MyStats";
+import RegionMap from "@/components/UI/map/RegionMap";
 
 export default [
   MyButton,
@@ -22,4 +23,5 @@ export default [
   MySignin,
   MyMenu,
   MyStats,
+  RegionMap,
 ];

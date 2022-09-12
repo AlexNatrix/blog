@@ -1,5 +1,6 @@
 <template>
   <h1>KEKW</h1>
+  <region-map />
 </template>
 
 <script>

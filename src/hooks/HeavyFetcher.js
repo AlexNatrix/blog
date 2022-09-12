@@ -13,15 +13,15 @@ export default async function fetchAll(text, lastSearchedDate) {
   while ((Date.now() - dateFrom) / (24 * 60 * 60 * 1000) < 30 && i < 100) {
     i++;
     console.log("Diff = " + (Date.now() - dateFrom) / (24 * 60 * 60 * 1000));
-    let kekTo = new Date(dateTo);
-    let kekFrom = new Date(dateFrom);
+    let ISOTo = new Date(dateTo);
+    let ISOFrom = new Date(dateFrom);
     const params = {
       text: text,
       per_page: 100,
       onlyWithSalary: "false",
       //ISO 8601 - YYYY-MM-DD or seconds precision YYYY-MM-DDThh:mm:ss±hhmm
-      dateFrom: kekFrom.toISOString().slice(0, 10),
-      dateTo: kekTo.toISOString().slice(0, 10),
+      dateFrom: ISOFrom.toISOString().slice(0, 10),
+      dateTo: ISOTo.toISOString().slice(0, 10),
     };
     const currentPages = await getPages(params);
     console.log(currentPages);
@@ -30,7 +30,10 @@ export default async function fetchAll(text, lastSearchedDate) {
     } else if (currentPages <= 5) {
       dateFrom -= 24 * 60 * 60 * 1000 * 3;
     } else {
-      dates.push(dateFrom, dateTo);
+      dates.push(
+        ISOFrom.toISOString().slice(0, 10),
+        ISOTo.toISOString().slice(0, 10)
+      );
       dateTo = dateFrom;
       dateFrom -= 24 * 60 * 60 * 1000 * 2;
       console.log(dates);
