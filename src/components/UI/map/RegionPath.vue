@@ -3,9 +3,8 @@
     :index="index"
     :d="region.path"
     class="state"
-    @mouseover="isActive = true"
+    @mouseover="showDialog(region)"
     @mouseout="isActive = false"
-    @click="showTitleDialog(region)"
     :class="{ regionActive: isActive }"
   />
 </template>
@@ -22,9 +21,9 @@ export default {
     };
   },
   methods: {
-    showTitleDialog(region) {
+    showDialog(region) {
       console.log(region);
-      this.$modal.show("dialog", {});
+      this.isActive = true;
     },
   },
 };

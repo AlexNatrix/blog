@@ -1,4 +1,5 @@
 import { ref, onMounted } from "vue";
+import getPages from "./getPages";
 
 export default function fetchHeadHunterJobs(text) {
   const jobs = ref([]);
@@ -6,6 +7,13 @@ export default function fetchHeadHunterJobs(text) {
   const isJobsLoading = ref(true);
   const totalJobs = ref(0);
   const lastSearchedDate = ref("");
+  const fetchAll = async (text, lastSearchedDate) => {
+    jobs.value = [
+      ...jobs.value,
+      ...(await getPages(text, lastSearchedDate.value)),
+    ];
+  };
+
   const fetchJobs = async (text) => {
     jobs.value = [];
     await fetch(
@@ -117,5 +125,6 @@ export default function fetchHeadHunterJobs(text) {
     isJobsLoading,
     totalJobs,
     lastSearchedDate,
+    fetchAll,
   };
 }

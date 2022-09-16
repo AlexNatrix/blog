@@ -32,7 +32,6 @@
 import { computed, ref, watch } from "vue";
 
 import fetchHeadHunterJobs from "@/hooks/fetchHeadHunterJobs";
-import fetchAll from "@/hooks/HeavyFetcher";
 import { debounce } from "lodash";
 
 export default {
@@ -43,11 +42,13 @@ export default {
     const currentFramework = ref("none");
 
     const filteredJobs = computed(() => {
-      return [...jobs.value].filter(
-        (a) =>
-          parseInt(a.salary.from) > (salaryRange.value[0] || 0) &&
-          parseInt(a.salary.to) < (salaryRange.value[1] + 1 || 9007199254740991)
-      );
+      console.log("Filtering jobs");
+      return [...jobs.value];
+      // .filter(
+      //   (a) =>
+      //     parseInt(a.salary.from) > (salaryRange.value[0] || 0) &&
+      //     parseInt(a.salary.to) < (salaryRange.value[1] + 1 || 9007199254740991)
+      // );
     });
     const jobsCountMap = computed(() => {
       let badValues = 0;
@@ -87,6 +88,7 @@ export default {
       isJobsLoading,
       totalJobs,
       lastSearchedDate,
+      fetchAll,
     } = fetchHeadHunterJobs(currentJob.value);
     const options = computed(() => {
       return {
@@ -207,7 +209,8 @@ export default {
       }, 10)
     );
     const fetchMore = () => {
-      fetchAll(currentJob.value + "frontend", lastSearchedDate);
+      fetchAll(currentJob.value, lastSearchedDate);
+      console.log(jobs.value);
       console.log("In development");
     };
 
